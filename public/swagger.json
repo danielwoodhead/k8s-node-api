@@ -42,28 +42,6 @@
 					"description": "My item description",
 					"image": "http://image"
 				}
-			},
-			"ValidationError": {
-				"properties": {
-					"message": {
-						"type": "string",
-						"enum": [
-							"Validation failed"
-						],
-						"nullable": false
-					},
-					"details": {
-						"properties": {},
-						"additionalProperties": {},
-						"type": "object"
-					}
-				},
-				"required": [
-					"message",
-					"details"
-				],
-				"type": "object",
-				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {}
@@ -94,14 +72,7 @@
 						}
 					},
 					"400": {
-						"description": "Validation Failed",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/ValidationError"
-								}
-							}
-						}
+						"description": "Bad Request"
 					},
 					"404": {
 						"description": "Not Found"

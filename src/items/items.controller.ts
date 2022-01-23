@@ -1,5 +1,4 @@
 import { Controller, Get, Path, Response, Route, Tags } from "tsoa";
-import { ValidationError } from "../common/common.types";
 import * as ItemService from "./items.service";
 import { Item } from "./items.types";
 
@@ -10,7 +9,7 @@ export class ItemsController extends Controller {
    * @isInt id
    */
   @Get("{id}")
-  @Response<ValidationError>(400, "Validation Failed")
+  @Response(400, "Bad Request")
   @Response(404, "Not Found")
   public async getItem(@Path() id: number) {
     const item: Item = await ItemService.find(id);

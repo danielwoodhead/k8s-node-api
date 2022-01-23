@@ -308,7 +308,6 @@ To demonstrate this we'll add a controller with a single endpoint for getting me
 
 ```
 import { Controller, Get, Path, Response, Route, Tags } from "tsoa";
-import { ValidationError } from "../common/common.types";
 import * as ItemService from "./items.service";
 import { Item } from "./items.types";
 
@@ -319,7 +318,6 @@ export class ItemsController extends Controller {
    * @isInt id
    */
   @Get("{id}")
-  @Response<ValidationError>(400, "Validation Failed")
   @Response(404, "Not Found")
   public async getItem(@Path() id: number) {
     const item: Item = await ItemService.find(id);
@@ -392,15 +390,6 @@ export interface Item {
 
 export interface Items {
   [key: number]: Item;
-}
-```
-
-`src/common/common.types.ts`:
-
-```
-export interface ValidationError {
-  message: "Validation failed";
-  details: { [name: string]: unknown };
 }
 ```
 
@@ -760,7 +749,8 @@ With this, the cycle to get a change into kubernetes is (from the repo root):
 
 1. Make code change
 2. Run `docker build -t k8s-node-api .`
-3. Run `helm upgrade --install k8s-node-api deployment/helm/k8s-node-api/`
+3. Run `kubectl rollout restart deployment/k8s-node-api`
+   - note: this is only suitable for demo purposes - in the real world you would create an image with a new tag and run `helm upgrade`
 
 # Troubleshooting
 
