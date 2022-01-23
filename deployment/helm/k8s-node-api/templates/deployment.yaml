@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-node-api
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-node-api
+  template:
+    metadata:
+      labels:
+        app: k8s-node-api
+    spec:
+      containers:
+        - name: k8s-node-api
+          image: k8s-node-api:{{ .Values.image.tag }}
+          imagePullPolicy: IfNotPresent
