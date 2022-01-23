@@ -218,11 +218,11 @@ it("/health returns 200", async () => {
 Add the new endpoint in `src/app.ts`:
 
 ```
-import express, { json, Request, Response } from "express";
+import express, { Request, Response } from "express";
 
 export default function createApp() {
   const app = express();
-  app.use(json());
+  app.use(express.json());
 
   app.get("/health", (req: Request, res: Response) => {
     res.status(200).send("Healthy");
