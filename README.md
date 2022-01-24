@@ -757,7 +757,7 @@ With this, the cycle to get a change into kubernetes is (from the repo root):
 1. Make code change
 2. Run `docker build -t k8s-node-api .`
 3. Run `kubectl rollout restart deployment/k8s-node-api`
-   - note: this is only suitable for demo purposes - in the real world you would create an image with a new tag and run `helm upgrade`
+   - note: this is only suitable for local development - beyond that you would create an image with a new tag and run `helm upgrade`
 
 # Troubleshooting
 
