@@ -300,7 +300,7 @@ Add a new file called `tsoa.json` with the following content:
 }
 ```
 
-Take note of `controllerPathGlobs` in the above configuration. It tells tsao where to find the controllers with which to generate the swagger json. It will also automatically generate the express routes, instead of us manually defining them as we've done so far.
+Take note of `controllerPathGlobs` in the above configuration. It tells tsoa where to find the controllers with which to generate the swagger json. It will also automatically generate the express routes, instead of us manually defining them as we've done so far.
 
 To demonstrate this we'll add a controller with a single endpoint for getting menu items by ID. Interacting with a real database is beyond the scope of this guide so it will use a simple in-memory implementation. We'll use several tsoa features to enrich the swagger. Add the following files.
 
@@ -318,6 +318,7 @@ export class ItemsController extends Controller {
    * @isInt id
    */
   @Get("{id}")
+  @Response(400, "Bad Request")
   @Response(404, "Not Found")
   public async getItem(@Path() id: number) {
     const item: Item = await ItemService.find(id);
@@ -737,6 +738,12 @@ with:
 
 ```
 image: k8s-node-api:{{ .Values.image.tag }}
+```
+
+This allows you to override the image tag:
+
+```
+helm upgrade --install --set image.tag=mytag k8s-node-api k8s-node-api/
 ```
 
 When you're finished, clear up the resources that were created:
