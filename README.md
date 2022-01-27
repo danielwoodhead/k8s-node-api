@@ -480,8 +480,7 @@ FROM node:16-alpine as builder
 WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm ci
-COPY tsconfig.json ./
-COPY tsoa.json ./
+COPY tsconfig.json tsoa.json ./
 COPY src src
 RUN npm run build
 
@@ -489,7 +488,7 @@ FROM node:16-alpine
 ENV NODE_ENV=production
 WORKDIR /usr/src/app
 COPY --from=builder /usr/src/app/package*.json ./
-RUN npm i --only=production
+RUN npm ci --only=production && npm cache clean --force
 COPY --from=builder /usr/src/app/build build/
 COPY --from=builder /usr/src/app/public public/
 EXPOSE 3000
@@ -523,17 +522,58 @@ Call the API (this should return "Healthy"):
 curl http://localhost:3000/health
 ```
 
-When you're finished, clear up the resources that were created:
+Stop the container:
 
 ```
 docker stop {container_id}
-docker rm {container_id}
 ```
 
 You can get the container ID with:
 
 ```
 docker ps
+```
+
+When you're finished, clear up the resources that were created:
+
+```
+docker system prune
+```
+
+## Docker Compose
+
+Docker Compose is a tool for defining and running multi-container Docker applications. However it can still be useful for single-container applications, in that it simplifies the build/run commands.
+
+Add a new file called `docker-compose.yaml` with the following content:
+
+```
+version: "3.9"
+services:
+  api:
+    build: .
+    ports:
+      - "3000:3000"
+```
+
+Build and run the image:
+
+```
+docker-compose build
+docker-compose up
+```
+
+Call the API (this should return "Healthy"):
+
+```
+curl http://localhost:3000/health
+```
+
+Press Ctrl+C to stop the container
+
+When you're finished, clear up the resources that were created:
+
+```
+docker system prune
 ```
 
 # Deploying to kubernetes
