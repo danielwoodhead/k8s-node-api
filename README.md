@@ -534,12 +534,6 @@ You can get the container ID with:
 docker ps
 ```
 
-When you're finished, clear up the resources that were created:
-
-```
-docker system prune
-```
-
 ## Docker Compose
 
 Docker Compose is a tool for defining and running multi-container Docker applications. However it can still be useful for single-container applications, in that it simplifies the build/run commands.
@@ -569,12 +563,6 @@ curl http://localhost:3000/health
 ```
 
 Press Ctrl+C to stop the container
-
-When you're finished, clear up the resources that were created:
-
-```
-docker system prune
-```
 
 # Deploying to kubernetes
 
@@ -799,7 +787,7 @@ With this, the cycle to get a change into kubernetes is (from the repo root):
 3. Run `kubectl rollout restart deployment/k8s-node-api`
    - note: this is only suitable for local development - beyond that you would create an image with a new tag and run `helm upgrade`
 
-# Troubleshooting
+# Useful commands
 
 Open a shell in a running container (docker):
 
@@ -811,6 +799,12 @@ Open a shell in a running container (kubernetes):
 
 ```
 kubectl exec --stdin --tty {pod_name} -- //bin/sh
+```
+
+Clear up resources:
+
+```
+docker system prune
 ```
 
 # Future
