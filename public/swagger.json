@@ -42,6 +42,88 @@
 					"description": "My item description",
 					"image": "http://image"
 				}
+			},
+			"ValidationProblemDetails": {
+				"properties": {
+					"type": {
+						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"status": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"detail": {
+						"type": "string"
+					},
+					"instance": {
+						"type": "string"
+					},
+					"errors": {
+						"properties": {},
+						"additionalProperties": {
+							"properties": {
+								"value": {},
+								"message": {
+									"type": "string"
+								}
+							},
+							"required": [
+								"message"
+							],
+							"type": "object"
+						},
+						"type": "object"
+					}
+				},
+				"required": [
+					"type",
+					"title",
+					"status",
+					"errors"
+				],
+				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"type": "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1",
+					"title": "One or more validation errors occurred",
+					"status": 400,
+					"errors": {
+						"id": {
+							"message": "id",
+							"value": "invalid"
+						}
+					}
+				}
+			},
+			"ProblemDetails": {
+				"properties": {
+					"type": {
+						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"status": {
+						"type": "integer",
+						"format": "int32"
+					},
+					"detail": {
+						"type": "string"
+					},
+					"instance": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"type",
+					"title",
+					"status"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {}
@@ -72,10 +154,24 @@
 						}
 					},
 					"400": {
-						"description": "Bad Request"
+						"description": "Bad Request",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationProblemDetails"
+								}
+							}
+						}
 					},
 					"404": {
-						"description": "Not Found"
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ProblemDetails"
+								}
+							}
+						}
 					}
 				},
 				"tags": [

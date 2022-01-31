@@ -1,4 +1,19 @@
-import { Controller, Get, Path, Response, Route, Tags } from "tsoa";
+import {
+  Controller,
+  Get,
+  Path,
+  Res,
+  Response,
+  Route,
+  Tags,
+  TsoaResponse,
+} from "tsoa";
+import { HttpStatusCode } from "../common/httpStatusCode";
+import {
+  notFoundResponseArgs,
+  ProblemDetails,
+  ValidationProblemDetails,
+} from "../common/problemDetails";
 import * as ItemService from "./items.service";
 import { Item } from "./items.types";
 
@@ -9,15 +24,18 @@ export class ItemsController extends Controller {
    * @isInt id
    */
   @Get("{id}")
-  @Response(400, "Bad Request")
-  @Response(404, "Not Found")
-  public async getItem(@Path() id: number) {
+  @Response<ValidationProblemDetails>(HttpStatusCode.BAD_REQUEST, "Bad Request")
+  public async getItem(
+    @Path() id: number,
+    @Res()
+    notFoundResponse: TsoaResponse<HttpStatusCode.NOT_FOUND, ProblemDetails>
+  ): Promise<Item> {
     const item: Item = await ItemService.find(id);
 
-    if (item) {
-      return item;
+    if (!item) {
+      return notFoundResponse(...notFoundResponseArgs("Item not found"));
     }
 
-    this.setStatus(404);
+    return item;
   }
 }

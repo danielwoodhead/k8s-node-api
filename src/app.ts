@@ -1,5 +1,7 @@
 import express, { Request, Response } from "express";
 import swaggerUi from "swagger-ui-express";
+import { errorMiddleware } from "./middleware/errorMiddleware";
+import { notFoundMiddleware } from "./middleware/notFoundMiddleware";
 import { RegisterRoutes } from "./routes";
 
 export default function createApp() {
@@ -22,6 +24,9 @@ export default function createApp() {
   );
 
   RegisterRoutes(app);
+
+  app.use(errorMiddleware);
+  app.use(notFoundMiddleware);
 
   return app;
 }
