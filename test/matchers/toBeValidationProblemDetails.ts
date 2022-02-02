@@ -1,7 +1,15 @@
 import { Response } from "supertest";
+import { HttpStatusCode } from "../../src/common/httpStatusCode";
 import { PROBLEM_DETAILS } from "../../src/common/problemDetails";
 
 export const toBeValidationProblemDetails = (received: Response) => {
+  if (received.statusCode !== HttpStatusCode.BAD_REQUEST) {
+    return {
+      message: () =>
+        `Response did not have the expected status code of ${HttpStatusCode.BAD_REQUEST}`,
+      pass: false,
+    };
+  }
   if (
     !received.body.type ||
     received.body.type !== PROBLEM_DETAILS.VALIDATION.type

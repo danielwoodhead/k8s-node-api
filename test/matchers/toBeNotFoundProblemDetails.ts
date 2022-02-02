@@ -1,10 +1,18 @@
 import { Response } from "supertest";
+import { HttpStatusCode } from "../../src/common/httpStatusCode";
 import { PROBLEM_DETAILS } from "../../src/common/problemDetails";
 
 export const toBeNotFoundProblemDetails = (
   received: Response,
   title: string
 ) => {
+  if (received.statusCode !== HttpStatusCode.NOT_FOUND) {
+    return {
+      message: () =>
+        `Response did not have the expected status code of ${HttpStatusCode.NOT_FOUND}`,
+      pass: false,
+    };
+  }
   if (
     !received.body.type ||
     received.body.type !== PROBLEM_DETAILS.NOT_FOUND.type

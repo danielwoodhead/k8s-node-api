@@ -1,7 +1,15 @@
 import { Response } from "supertest";
+import { HttpStatusCode } from "../../src/common/httpStatusCode";
 import { PROBLEM_DETAILS } from "../../src/common/problemDetails";
 
 export const toBeInternalServerErrorProblemDetails = (received: Response) => {
+  if (received.statusCode !== HttpStatusCode.INTERNAL_SERVER_ERROR) {
+    return {
+      message: () =>
+        `Response did not have the expected status code of ${HttpStatusCode.INTERNAL_SERVER_ERROR}`,
+      pass: false,
+    };
+  }
   if (
     !received.body.type ||
     received.body.type !== PROBLEM_DETAILS.INTERNAL_SERVER_ERROR.type

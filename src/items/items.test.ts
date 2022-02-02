@@ -15,21 +15,18 @@ const mockFind = find as jest.MockedFunction<typeof find>;
 describe("GET items/{id}", () => {
   it("returns validation problem details for invalid item ID", async () => {
     const response = await request(app).get("/items/foo");
-    expect(response.statusCode).toEqual(400);
     expect(response).toBeValidationProblemDetails();
   });
 
   it("returns internal server error problem details for unhandled error", async () => {
     mockFind.mockRejectedValueOnce(new Error("error"));
     const response = await request(app).get("/items/1");
-    expect(response.statusCode).toEqual(500);
     expect(response).toBeInternalServerErrorProblemDetails();
   });
 
   it("returns not found problem details for unknown item", async () => {
     mockFind.mockResolvedValueOnce(undefined as unknown as Item);
     const response = await request(app).get("/items/1");
-    expect(response.statusCode).toEqual(404);
     expect(response).toBeNotFoundProblemDetails("Item not found");
   });
 
